@@ -35,7 +35,7 @@ export class Font implements IFont {
 	set font(val) {
 		this._font = val
 		this._disassembleFont()
-		this.merics = getTextMetrics(this._font)
+		this.merics = getTextMetrics(this._font, this._height)
 	}
 
 	get family() {
@@ -85,7 +85,7 @@ export class Font implements IFont {
 
 	private _assembleFont() {
 		this._font = `${this._style || ''} ${this._variant || ''} ${this._weight || ''} ${this._size || ''} ${this._height ? '/' : ''} ${this._height || ''} ${this._family}`
-		this.merics = getTextMetrics(this._font)
+		this.merics = getTextMetrics(this._font, this._height)
 	}
 
 	private _disassembleFont() {
@@ -233,11 +233,12 @@ export interface TextMetric {
 	descent: number
 }
 
-function getTextMetrics(font: string): TextMetric {
+function getTextMetrics(font: string, lineHeight: string | number): TextMetric {
 	let text = document.createElement('span');
 	text.innerText = 'Hg';
 	text.style.fontFamily = font;
 	text.style.fontSize = parseInt(font) + "px";
+	text.style.lineHeight = lineHeight + '';
 
 	let block = document.createElement('div');
 	block.style.display = 'inline-block';

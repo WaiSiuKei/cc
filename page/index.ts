@@ -27,7 +27,7 @@ let leftTop = new cc.Text({
 	y: 170,
 	fontSize: '20px',
 	textAlign: TextAlign.Left,
-	textBaseline: TextBaseLine.Top
+	textBaseline: TextBaseLine.Top,
 })
 let centerTop = new cc.Text({
 	value: 'agM',
@@ -78,10 +78,7 @@ let all = [].concat.apply([], [
 ]);
 
 layer.appendChildren(all)
-stage.update()
 
 all.forEach(a => {
 	layer.appendChildren(new cc.path.Rect(a.bounds))
 })
-
-stage.update()
