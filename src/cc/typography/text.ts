@@ -1,17 +1,21 @@
 import {Element} from "../dom/element";
 import {IBaseText, IText, TextAlign, TextBaseLine} from "./def";
 import {Rectangle} from "../core/rectangle";
+import {Font} from "../core/font";
+import {fontStyle, fontVariant, fontWeight, IBaseRectangle} from "../core/def";
+import {Matrix} from "../core/matrix";
+import {Vector} from "../core/vector";
 
-export class Text extends Element implements IText {
+export class Text extends Element {
 	value: string
 	x: number
 	y: number
-	font: string
+	font: Font
 	textAlign: TextAlign
 	textBaseline: TextBaseLine
 
+	_bounds: IBaseRectangle
 	_width: number
-	_height: number
 
 	constructor(t: IBaseText) {
 		super(null)
@@ -21,47 +25,82 @@ export class Text extends Element implements IText {
 		this.value = t.value
 		this.x = t.x
 		this.y = t.y
-		this.font = t.font
+		this.font = new Font({
+			// font: t.font,
+			family: t.fontFamily,
+			size: t.fontSize,
+			style: t.fontStyle as fontStyle,
+			variant: t.fontVariant as fontVariant,
+			weight: t.fontWeight as fontWeight,
+			height: t.lineHeight
+		})
 		this.textAlign = t.textAlign || TextAlign.Left
-		this.textBaseline = t.textBaseline || TextBaseLine.Bottom
+		this.textBaseline = t.textBaseline || TextBaseLine.Top
 	}
 
-	// get bounds() {
-	// if (Matrix.isIdentity(this.matrix)) return Rectangle.boundingOf({x: this.x1, y: this.y1}, {x: this.x2, y: this.y2})
-	// else {
-	// 	let p0 = Vector.transform({x: this.x1, y: this.y1}, this.matrix)
-	// 	let p1 = Vector.transform({x: this.x2, y: this.y2}, this.matrix)
-	// 	return Rectangle.boundingOf(p0, p1)
-	// }
-	// }
+	get bounds() {
+		let bounds = this.calculateBoundingBox()
+		if (Matrix.isIdentity(this.matrix)) return bounds
+		else {
+			let p0 = Vector.transform(Rectangle.topLeft(bounds), this.matrix)
+			let p1 = Vector.transform(Rectangle.bottomRight(bounds), this.matrix)
+			return Rectangle.boundingOf(p0, p1) // TODO: ratation case
+		}
+	}
+
+	calculateBoundingBox(): IBaseRectangle {
+		let {height, descent, ascent} = this.font.merics
+		let rect = {x: this.x, y: this.y, width: this._width, height: height}
+		switch (this.textBaseline) {
+			case TextBaseLine.Middle:
+			{
+				rect.y += (ascent - height / 2)
+			}
+			case TextBaseLine.Alphabetic:
+			{
+				rect.y += descent
+			}
+			case TextBaseLine.Bottom:
+			{
+				rect.y -= height
+			}
+		}
+
+		switch (this.textAlign) {
+			case TextAlign.Center:
+			{
+				rect.x += (this._width / 2)
+			}
+			case TextAlign.Right:
+			{
+				rect.x -= this._width
+			}
+		}
+		return rect
+	}
 
 	contains(point): boolean {
-		if (this.textBaseline === TextBaseLine.Middle) {
-			let halfWidth = this._width / 2
-			return Rectangle.contains({x: this.x - halfWidth, y: this.y, width: this._width, height: this._height}, point)
-		}
-		return false
-		// return BaseLine.contains(this.x1, this.y1, this.x2, this.y2, this.strokeWidth + this.hitRange, point.x, point.y)
+		return Rectangle.contains(this.bounds, point)
 	}
 
 	render(ctx: CanvasRenderingContext2D) {
-		super.render(ctx)
 		if (!this.isVisible) return
 		if (this.opacity === 0) return
+		if (!this.value) {
+			this._width = 0
+			return
+		}
 		ctx.save()
 
 		let mx = this.matrix
 		ctx.transform(mx.a, mx.b, mx.c, mx.d, mx.tx, mx.ty)
 
-		ctx.font = this.font
+		ctx.font = this.font.font
 		ctx.textAlign = this.textAlign
 		ctx.textBaseline = this.textBaseline
 		if (this.fillColor) ctx.fillStyle = this.fillColor.toString()
-
-		this._height = ctx.measureText('M').width;
 		this._width = ctx.measureText(this.value).width
 		ctx.fillText(this.value, this.x, this.y);
-
 		ctx.restore()
 	}
 }

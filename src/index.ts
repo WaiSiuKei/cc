@@ -4,6 +4,7 @@ export * from './cc/drawing'
 export * from './cc/ease'
 export * from './cc/selection'
 export * from './cc/transition'
+export * from './cc/typography'
 
 import * as p from './cc/path'
 

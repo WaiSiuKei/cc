@@ -6,13 +6,12 @@ import {Arc} from "../path/arc";
 import {Vector} from "../core/vector";
 import {IText, TextAlign, TextBaseLine} from "../typography/def";
 import {Text} from '../typography/text'
-import {Matrix} from "../core/matrix";
 
 export class TrendAngle extends TwoPointDrawing implements ITrendAngle {
 	line: ILine
 	horizontalLine: ILine
 	arc: IArc
-	label: IText
+	label: Text
 	static ArcSize = 50
 
 	constructor(l: ITwoPointDrawing) {

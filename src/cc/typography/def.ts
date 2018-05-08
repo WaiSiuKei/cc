@@ -4,31 +4,31 @@ export interface IBaseText {
 	value: string
 	x: number
 	y: number
-	font: string
-	textAlign: TextAlign
-	textBaseline: TextBaseLine
-}
-
-export interface Font {
-	size: number
-	family: string
-	weight: number | 'blod' | 'normal'
+	textAlign?: TextAlign
+	textBaseline?: TextBaseLine,
+	font?: string;
+	fontFamily?: string | null;
+	fontSize?: string | null;
+	fontStyle?: string | null;
+	fontVariant?: string | null;
+	fontWeight?: string | null;
+	lineHeight?: string | null;
 }
 
 export enum TextAlign {
 	Left = 'left',
 	Right = 'right',
 	Center = 'center',
-	Start = 'start',
-	End = 'end'
+	// Start = 'start',
+	// End = 'end'
 }
 
 export enum TextBaseLine {
 	Top = 'top',
-	Hanging = 'hanging',
+	// Hanging = 'hanging',
 	Middle = 'middle',
 	Alphabetic = 'alphabetic',
-	Ideographic = 'ideographic',
+	// Ideographic = 'ideographic',
 	Bottom = 'bottom'
 }
 
