@@ -54,28 +54,28 @@ export class EventProxy implements IEventProxy, IDisposable {
 	}
 
 	private handleMouseDown(e: MouseEvent) {
-		e.preventDefault()
-		e.stopImmediatePropagation()
+		// e.preventDefault()
+		// e.stopImmediatePropagation()
 		this._onMouseEvent.fire(makeSyntheticEvent(e, this.target, EventType.MOUSE_DOWN))
 	}
 
 	private handleMouseClick(e: MouseEvent) {
-		e.preventDefault()
-		e.stopImmediatePropagation()
+		// e.preventDefault()
+		// e.stopImmediatePropagation()
 		this._onMouseEvent.fire(makeSyntheticEvent(e, this.target, EventType.CLICK))
 	}
 
 	private handleMouseUp(e: MouseEvent) {
-		e.preventDefault()
-		e.stopImmediatePropagation()
+		// e.preventDefault()
+		// e.stopImmediatePropagation()
 		this.firstDragPosition = null
 		this.prevDragPosition = null
 		this._onMouseEvent.fire(makeSyntheticEvent(e, this.target, EventType.MOUSE_UP))
 	}
 
 	private handleMouseMove(e: MouseEvent) {
-		e.preventDefault()
-		e.stopImmediatePropagation()
+		// e.preventDefault()
+		// e.stopImmediatePropagation()
 		let event = makeSyntheticEvent(e, this.target, EventType.MOUSE_MOVE)
 		if (event.buttons) {
 			if (!this.firstDragPosition) this.firstDragPosition = {x: event.x, y: event.y}

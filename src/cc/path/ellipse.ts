@@ -34,8 +34,7 @@ export class Ellipse extends Element implements IEllipse {
 
 	calculateBounds() {
 		// https://math.stackexchange.com/questions/91132/how-to-get-the-limits-of-rotated-ellipse
-		// let d = (this.strokeWidth + this.hitRange) / 2
-		let d = 0
+		let d = (this.strokeWidth + this.hitRange) / 2
 		// let phi = Matrix.decompose(this.matrix).rotation
 		let phi = 0
 		let ux = (this.r1 + d) * Math.cos(phi);

@@ -169,36 +169,36 @@ export class Selection implements ISelection {
 		return new Selection(subgroups, this.parents);
 	}
 
-	sort(compare = ascending) {
-
-		function compareNode(a, b) {
-			return a && b ? compare(a.dat, b.data) : Number(Boolean(a)) - Number(Boolean(b));
-		}
-
-		for (var groups = this.groups, m = groups.length, sortgroups = new Array(m), j = 0; j < m; ++j) {
-			for (var group = groups[j], n = group.length, sortgroup = sortgroups[j] = new Array(n), node, i = 0; i < n; ++i) {
-				if (node = group[i]) {
-					sortgroup[i] = node;
-				}
-			}
-			sortgroup.sort(compareNode);
-		}
-
-		return new Selection(sortgroups, this.parents).order();
-	}
-
-	order() {
-		for (let groups = this.groups, j = -1, m = groups.length; ++j < m;) {
-			for (let group = groups[j], i = group.length - 1, next = group[i], node; --i >= 0;) {
-				if (node = group[i]) {
-					if (next && next !== node.nextSibling) next.insertAbove(next);
-					next = node;
-				}
-			}
-		}
-
-		return this;
-	}
+	// sort(compare = ascending) {
+    //
+	// 	function compareNode(a, b) {
+	// 		return a && b ? compare(a.dat, b.data) : Number(Boolean(a)) - Number(Boolean(b));
+	// 	}
+    //
+	// 	for (var groups = this.groups, m = groups.length, sortgroups = new Array(m), j = 0; j < m; ++j) {
+	// 		for (var group = groups[j], n = group.length, sortgroup = sortgroups[j] = new Array(n), node, i = 0; i < n; ++i) {
+	// 			if (node = group[i]) {
+	// 				sortgroup[i] = node;
+	// 			}
+	// 		}
+	// 		sortgroup.sort(compareNode);
+	// 	}
+    //
+	// 	return new Selection(sortgroups, this.parents).order();
+	// }
+    //
+	// order() {
+	// 	for (let groups = this.groups, j = -1, m = groups.length; ++j < m;) {
+	// 		for (let group = groups[j], i = group.length - 1, next = group[i], node; --i >= 0;) {
+	// 			if (node = group[i]) {
+	// 				if (next && next !== node.nextSibling) next.insertAbove(next);
+	// 				next = node;
+	// 			}
+	// 		}
+	// 	}
+    //
+	// 	return this;
+	// }
 
 	on(type: string, callback: Function) {
 		this.forEach((node) => node.addEventListener(type, callback));

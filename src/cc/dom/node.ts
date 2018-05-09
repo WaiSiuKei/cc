@@ -1,12 +1,11 @@
 import {INode, NodeMatcher} from "./def";
 import {IVector} from "../core/def";
 import {NodeEventEmitter} from "../dispatch/eventEmitter";
+import {isNumber} from "../../base/common/types";
 
 export class Node extends NodeEventEmitter implements INode {
 	public children: INode[]
 	public parent: INode
-	public previousSibling: INode
-	public nextSibling: INode
 
 	public id: string
 	public type: string
@@ -27,10 +26,6 @@ export class Node extends NodeEventEmitter implements INode {
 			ancestor = ancestor.parent
 		}
 		return ancestor
-	}
-	get index() {
-		if (!this.parent) return -1
-		return this.parent.children.indexOf(this)
 	}
 
 	isParentOf(node: INode): boolean {return node.parent === this}
@@ -53,9 +48,6 @@ export class Node extends NodeEventEmitter implements INode {
 		}
 		return false
 	}
-	isSiblingOf(node: INode): boolean {
-		return this.parent === node.parent
-	}
 
 	prependChildren(child: INode | INode[]): void {
 		if (!Array.isArray(child)) this._prependChild(child)
@@ -67,18 +59,7 @@ export class Node extends NodeEventEmitter implements INode {
 	}
 
 	protected _prependChild(child: INode): void {
-		let len = this.children.length
-		if (len === 0) {
-			child.previousSibling = null
-			child.nextSibling = null
-		} else {
-			let lastOne = this.children[len - 1]
-			lastOne.nextSibling = child
-			child.nextSibling = null
-			child.previousSibling = lastOne
-		}
 		this.children.push(child)
-
 		child.parent = this
 	}
 
@@ -92,16 +73,6 @@ export class Node extends NodeEventEmitter implements INode {
 	}
 
 	protected _appendChild(child: INode): void {
-		let len = this.children.length
-		if (len === 0) {
-			child.previousSibling = null
-			child.nextSibling = null
-		} else {
-			let firstOne = this.children[0]
-			firstOne.previousSibling = child
-			child.nextSibling = firstOne
-			child.previousSibling = null
-		}
 		this.children.unshift(child)
 
 		child.parent = this
@@ -117,71 +88,57 @@ export class Node extends NodeEventEmitter implements INode {
 	}
 
 	protected _insertChild(index: number, child: INode): void {
-		let len = this.children.length
-		if (len === 0) {
-			child.previousSibling = null
-			child.nextSibling = null
-		} else {
-			if (index > len) index = len
-			let prevOne = index === 0 ? null : this.children[index]
-			let nextOne = index === len ? null : this.children[index]
-			if (nextOne) nextOne.previousSibling = child
-			child.nextSibling = nextOne
-			child.previousSibling = prevOne
-			if (prevOne) prevOne.nextSibling = child
-		}
-		this.children.unshift(child)
-
+    this.children.splice(index, 0, child)
 		child.parent = this
 	}
 
 	removeChildren()
 	removeChildren(start)
 	removeChildren(start, end)
-	removeChildren(...args) {
+	removeChildren(arg1?: number | Node, arg2?: number) {
 		if (!this.children.length) return
-		let start = args[0] || 0
-		let end = args[1] || this.children.length
-		let prevOne = start === 0 ? null : this.children[start]
-		let nextOne = end === this.children.length ? null : this.children[end]
+    let start
+    let end
+    if (!arguments.length) {
+      let start = 0
+      let end = this.children.length
+    } else if (arguments.length === 1) {
+      start = isNumber(arg1) ? arg1 : this.children.indexOf(arg1)
+      end = start + 1
+    } else {
+		  start = arg1
+      end = arg2
+    }
 		for (let i = start; i < end; i++) {
 			let child = this.children[i]
 			child.parent = null
-			child.nextSibling = null
-			child.previousSibling = null
+      child.dispose()
 			child = null
 		}
-		this.children.splice(start, end - start)
-		prevOne.nextSibling = nextOne
-		nextOne.previousSibling = prevOne
+    this.children.splice(start, end - start)
 	}
 
 	reverseChildren() {
 		let len = this.children.length
 		if (!len) return
 		this.children = this.children.reverse()
-		this.children[0].previousSibling = null
-		for (let i = 0; i < len; i++) {
-			let child = this.children[i]
-			let nextOne = i === len - 1 ? null : this.children[i + 1]
-			child.nextSibling = nextOne
-			if (nextOne) nextOne.previousSibling = child
-		}
 	}
 
 	insertAbove(node: INode): void {
 		if (!this.parent) throw new Error()
-		this.parent.insertChildren(this.index, node)
+    let index = this.parent.children.indexOf(node)
+		this.parent.insertChildren(index, node)
 	}
 
 	insertBelow(node: INode): void {
 		if (!this.parent) throw new Error()
-		this.parent.insertChildren(this.index + 1, node)
+    let index = this.parent.children.indexOf(node)
+		this.parent.insertChildren(index + 1, node)
 	}
 
 	replaceWith(node: INode): void {
 		if (!this.parent) throw new Error()
-		let index = this.index
+		let index = this.parent.children.indexOf(node)
 		this.remove()
 		this.parent.insertChildren(index, node)
 	}
@@ -196,16 +153,6 @@ export class Node extends NodeEventEmitter implements INode {
 
 	addTo(node: INode): void {
 		this.parent = node
-		let len = node.children.length
-		if (len !== 0) {
-			let lastOne = node.children[len - 1]
-			lastOne.nextSibling = this
-			this.previousSibling = lastOne
-		} else {
-			this.previousSibling = null
-
-		}
-		this.nextSibling = null
 		node.children.push(this)
 	}
 
@@ -213,31 +160,20 @@ export class Node extends NodeEventEmitter implements INode {
 		if (!this.parent) {
 			return
 		} else {
-			let index = this.index
+			let index = this.parent.children.indexOf(this)
 			this.parent.removeChildren(index, index + 1)
 		}
-	}
-
-	isAbove(item: INode): boolean {
-		if (this.parent === item.parent) return this.index > item.index
-		// TODO
-		return false
-	}
-
-	isBelow(item: INode): boolean {
-		if (this.parent === item.parent) return this.index < item.index
-		// TODO
-		return false
 	}
 
 	select(matcher: NodeMatcher): INode {
 		if (matcher(this)) return this
 		if (!this.children.length) return null
-		let child = this.children[0]
-		while (child) {
+    let i = 0
+    let child
+		while (child = this.children[i]) {
 			let match = child.select(matcher)
 			if (match) return match
-			child = child.nextSibling
+      i++
 		}
 		return null
 	}
@@ -245,11 +181,12 @@ export class Node extends NodeEventEmitter implements INode {
 	selectAll(matcher: NodeMatcher): INode[] {
 		let matches = []
 		if (matcher(this)) matches.push(this)
-		let child = this.children[0]
-		while (child) {
+    let i = 0
+    let child
+		while (child = this.children[i]) {
 			let childMatches = child.selectAll(matcher)
 			if (childMatches.length) matches = matches.concat(childMatches)
-			child = child.nextSibling
+      i++
 		}
 		return matches
 	}
@@ -270,5 +207,6 @@ export class Node extends NodeEventEmitter implements INode {
     super.dispose()
     this.children.forEach(c => c.dispose())
     this.children.length = 0
+    this.remove()
   }
 }

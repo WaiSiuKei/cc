@@ -6,8 +6,8 @@ export interface ISelection {
 	forEach(func: Function): ISelection;
 	filter(cond: Function): ISelection;
 	merge(selection: ISelection): ISelection
-	order(): ISelection
-	sort(comparer: Function): ISelection
+	// order(): ISelection
+	// sort(comparer: Function): ISelection
 
 	on(eventType: string, callback: Function): ISelection;
 	once(eventType: string, callback: Function): ISelection;
