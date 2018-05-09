@@ -39,13 +39,16 @@ export class Text extends Element {
 	}
 
 	get bounds() {
+		if (this._bounds) return this._bounds
 		let bounds = this.calculateBoundingBox()
-		if (Matrix.isIdentity(this.matrix)) return bounds
-		else {
+		if (Matrix.isIdentity(this.matrix)) {
+			this._bounds = bounds
+		} else {
 			let p0 = Vector.transform(Rectangle.topLeft(bounds), this.matrix)
 			let p1 = Vector.transform(Rectangle.bottomRight(bounds), this.matrix)
-			return Rectangle.boundingOf(p0, p1) // TODO: ratation case
+			this._bounds = Rectangle.boundingOf(p0, p1) // TODO: ratation case
 		}
+		return this._bounds
 	}
 
 	calculateBoundingBox(): IBaseRectangle {
