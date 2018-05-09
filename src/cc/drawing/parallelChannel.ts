@@ -4,7 +4,7 @@ import {ILine} from "../path/def";
 import {Line} from "../path/line";
 import {Line as BaseLine} from "../core/line";
 import {IDisposable} from "../../base/common/lifecycle";
-import {addDisposableListener, EventType} from "../../base/browser/dom";
+import {addDisposableListener, EventType} from "../../base/browser/event";
 import {IStage} from "../dom/def";
 
 export class ParallelChannel extends ThreePointDrawing {

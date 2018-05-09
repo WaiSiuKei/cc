@@ -5,11 +5,10 @@
 
 'use strict';
 
-import * as platform from './platform';
 import {Disposable} from "./lifecycle";
 
 export class TimeoutTimer extends Disposable {
-    private _token: platform.TimeoutToken;
+    private _token: number;
 
     constructor() {
         super();
@@ -23,14 +22,14 @@ export class TimeoutTimer extends Disposable {
 
     cancel(): void {
         if (this._token !== -1) {
-            platform.clearTimeout(this._token);
+            clearTimeout(this._token);
             this._token = -1;
         }
     }
 
     cancelAndSet(runner: () => void, timeout: number): void {
         this.cancel();
-        this._token = platform.setTimeout(() => {
+        this._token = setTimeout(() => {
             this._token = -1;
             runner();
         }, timeout);
@@ -41,7 +40,7 @@ export class TimeoutTimer extends Disposable {
             // timer is already set
             return;
         }
-        this._token = platform.setTimeout(() => {
+        this._token = setTimeout(() => {
             this._token = -1;
             runner();
         }, timeout);

@@ -1,6 +1,4 @@
 import {IBaseMatrix, IBaseVector, IVector} from "./def";
-import Event, {Emitter} from "../../base/common/events";
-import {dispose, IDisposable} from "../../base/common/lifecycle";
 import {isZero, TRIGONOMETRIC_EPSILON} from "../../base/common/numerical";
 
 export class Vector implements IVector {

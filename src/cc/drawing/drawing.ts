@@ -2,7 +2,7 @@ import {Element} from "../dom/element";
 import {dispose, IDisposable} from "../../base/common/lifecycle";
 import {ILollipop, IOnePointDrawing, IThreePointDrawing, ITwoPointDrawing} from "./def";
 import {Lollipop} from "./lollipop";
-import {addDisposableListener, EventType} from "../../base/browser/dom";
+import {addDisposableListener, EventType} from "../../base/browser/event";
 import {IStage} from "../dom/def";
 import {IBaseVector} from "../core/def";
 

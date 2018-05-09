@@ -1,5 +1,5 @@
 import {IBase, IBaseMatrix, IBaseRectangle, IBaseSize, IBaseVector, IMatrix, ISize, IVector} from "../core/def";
-import Event from "../../base/common/events";
+import {Event} from "../../base/common/events";
 import {Color} from "../core/color";
 import {IAnimator} from "../transition/def";
 import {INodeEventEmitter} from "../dispatch/def";

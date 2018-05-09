@@ -242,16 +242,6 @@ export class EventEmitter implements IEventEmitter {
     }
 }
 
-class EmitQueueElement {
-    public target: Function;
-    public arg: any;
-
-    constructor(target: Function, arg: any) {
-        this.target = target;
-        this.arg = arg;
-    }
-}
-
 function safeInvokeNoArg<T>(func: Function): T {
     try {
         return func();

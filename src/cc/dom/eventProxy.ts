@@ -1,8 +1,8 @@
 import {IDragEvent, IEventProxy, IMouseEvent} from "./def";
 import {dispose, IDisposable} from "../../base/common/lifecycle";
-import {addDisposableListener, EventType} from "../../base/browser/dom";
-import {clientToLocal} from "../../base/browser/event";
-import Event, {Emitter} from "../../base/common/events";
+import {addDisposableListener, EventType} from "../../base/browser/event";
+import {clientToLocal} from "../../base/browser/dom";
+import {Emitter} from "../../base/common/events";
 import {IBaseVector} from "../core/def";
 
 function makeSyntheticEvent(e: MouseEvent, element, type): IMouseEvent {

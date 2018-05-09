@@ -1,6 +1,4 @@
 import {IBaseMatrix, IBaseVector, IMatrix, IMatrixDecomposition} from "./def";
-import Event, {Emitter} from "../../base/common/events";
-import {dispose, IDisposable} from "../../base/common/lifecycle";
 import {Vector} from "./vector";
 
 export class Matrix implements IMatrix {

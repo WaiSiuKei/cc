@@ -1,7 +1,7 @@
 import {IMouseEvent, INode} from "./def";
 import {EventProxy} from "./eventProxy";
 import {dispose, IDisposable} from "../../base/common/lifecycle";
-import {EventType} from "../../base/browser/dom";
+import {EventType} from "../../base/browser/event";
 
 export class EventHandler implements IDisposable {
 	proxy: EventProxy

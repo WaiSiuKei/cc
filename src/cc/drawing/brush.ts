@@ -1,14 +1,11 @@
-import {Element} from "../dom/element";
-import {dispose, IDisposable} from "../../base/common/lifecycle";
 import {ILollipop, ITwoPointDrawing} from "./def";
 import {IBaseVector} from "../core/def";
 import {Lollipop} from "./lollipop";
 import {ILine} from "../path/def";
-import {addDisposableListener, EventType} from "../../base/browser/dom";
+import {addDisposableListener, EventType} from "../../base/browser/event";
 import {IStage} from "../dom/def";
 import {Line} from "../path/line";
 import {TwoPointDrawing} from "./drawing";
-import {Vector} from "../core/vector";
 import {Matrix} from "../core/matrix";
 
 export class Brush extends TwoPointDrawing {

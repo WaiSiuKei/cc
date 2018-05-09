@@ -1,6 +1,3 @@
-import Event from '../../base/common/events'
-import {IDisposable} from "../../base/common/lifecycle";
-
 export interface IStringifyable {
 	toString(): string;
 }

@@ -2,7 +2,7 @@ import {ILollipop} from "./def";
 import {Circle} from "../path/circle";
 import {Color} from "../core/color";
 import {dispose, IDisposable} from "../../base/common/lifecycle";
-import {EventType} from "../../base/browser/dom";
+import {EventType} from "../../base/browser/event";
 import {Vector} from "../core/vector";
 
 export class Lollipop extends Circle implements ILollipop, IDisposable {
