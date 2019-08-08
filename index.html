@@ -2,11 +2,16 @@
 <head>
   <title>CC - A canvas library</title>
   <style>
+    body {
+      margin: 0;
+    }
+
     iframe {
-      height: 97%;
-      width: 80%;;
-      margin-left: 250px;
+      height: 100%;
+      width: calc(100vw - 250px);
+      right: 0;
       padding: 0;
+      box-sizing: border-box;
       position: absolute;
       border: 1px solid;
     }
@@ -16,7 +21,7 @@
 <body>
 <iframe name="iframe"></iframe>
 CC - A canvas library
-<ul>
+<ul style="max-height: calc(100vh - 60px);width: 200px;overflow: auto">
   Basic
   <li><a href="demo/transition.html" target="iframe">Transition</a></li>
   <li><a href="demo/group-bounds.html" target="iframe">Bbox of group</a></li>
@@ -25,6 +30,7 @@ CC - A canvas library
   <li><a href="demo/path-bounds-transform.html" target="iframe">Bounds of path + trans</a></li>
   <li><a href="demo/path-transform.html" target="iframe">path + trans</a></li>
   <li><a href="demo/text.html" target="iframe">text</a></li>
+  <li><a href="demo/text-transition.html" target="iframe">text-animation</a></li>
   <br>
   Drawing
   <li><a href="demo/draw-arrow.html" target="iframe">Arrow</a></li>

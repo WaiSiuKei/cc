@@ -1,5 +1,5 @@
 import * as cc from '../src'
-import {TextAlign, TextBaseLine} from "../src/cc/typography/def";
+import {TextAlign, TextBaseLine} from '../src/cc/typography/def';
 
 window['cc'] = cc
 
@@ -9,76 +9,27 @@ let layer = new cc.Layer()
 stage.appendChildren(layer)
 layer.bounds = stage.bounds
 
-let top = new cc.path.Line({x1: 100, x2: 500, y1: 200, y2: 200})
-let middle = new cc.path.Line({x1: 100, x2: 500, y1: 210, y2: 210})
-let bottom = new cc.path.Line({x1: 100, x2: 500, y1: 222, y2: 222})
-let vertical = new cc.path.Line({x1: 100, x2: 100, y1: 10, y2: 400})
 
-middle.strokeColor = cc.Color.green
-top.strokeColor = cc.Color.cyan
-bottom.strokeColor = cc.Color.blue
-vertical.strokeColor = cc.Color.red
+const {width, height} = document.body.getBoundingClientRect();
 
-layer.appendChildren([top, middle, bottom, vertical])
 
-let leftTop = new cc.Text({
-	value: 'agM',
-	x: 100,
-	y: 170,
-	fontSize: '20px',
-	textAlign: TextAlign.Left,
-	textBaseline: TextBaseLine.Top,
-})
-let centerTop = new cc.Text({
-	value: 'agM',
-	x: 100,
-	y: 200,
-	fontSize: '20px',
+let text = new cc.Text({
+	value: 'Test',
+	x: 0,
+	y: 0,
+	fontSize: 10,
 	textAlign: TextAlign.Center,
-	textBaseline: TextBaseLine.Top
-})
-let rightTop = new cc.Text({
-	value: 'agM',
-	x: 100,
-	y: 230,
-	fontSize: '20px',
-	textAlign: TextAlign.Right,
-	textBaseline: TextBaseLine.Top
-})
-let leftMiddle = new cc.Text({
-	value: 'agM',
-	x: 150,
-	y: 200,
-	fontSize: '20px',
-	textAlign: TextAlign.Left,
-	textBaseline: TextBaseLine.Middle
+	textBaseline: TextBaseLine.Bottom,
 })
 
-let leftAfb = new cc.Text({
-	value: 'agM',
-	x: 200,
-	y: 200,
-	fontSize: '20px',
-	textAlign: TextAlign.Left,
-	textBaseline: TextBaseLine.Alphabetic
-})
+layer.appendChildren(text)
 
-let leftBottom = new cc.Text({
-	value: 'agM',
-	x: 250,
-	y: 200,
-	fontSize: '20px',
-	textAlign: TextAlign.Left,
-	textBaseline: TextBaseLine.Bottom
-})
+cc.from(stage)
+	.selectAll(l => l === text)
+	.transition(
+		cc.transition()
+			.tween({x: width / 2, y: height / 2, fontSize: 100}, 1000, cc.EaseType.ExponentialIn)
+			.tween({x: 0, y: 0, fontSize: 10}, 1000, cc.EaseType.ExponentialOut)
+	);
 
-let all = [].concat.apply([], [
-	[leftTop, centerTop, rightTop],
-	[leftMiddle, leftAfb, leftBottom],
-]);
-
-layer.appendChildren(all)
-
-all.forEach(a => {
-	layer.appendChildren(new cc.path.Rect(a.bounds))
-})
+stage.animator.start();

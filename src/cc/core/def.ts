@@ -182,7 +182,8 @@ export type fontWeight = '100' | '200' | '300' | '400' | '500' | '600' | '700' |
 
 export interface IFont {
 	family?: string | null
-	size?: absoluteFontSize | relativeFontSize | number | string | null// <absolute-size> | <relative-size> | <length> | <percentage>
+	// size?: absoluteFontSize | relativeFontSize | number | string | null// <absolute-size> | <relative-size> | <length> | <percentage>
+	size?: number
 	style?: fontStyle | null
 	variant?: fontVariant | null
 	weight?: fontWeight | null

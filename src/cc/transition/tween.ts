@@ -1,9 +1,9 @@
-import {IDynamicTween, IEmptyTween, IFrameEvent, IStaticTween} from "./def";
+import {IDynamicTween, IEmptyTween, IFrameEvent, IStaticTween} from './def';
 import * as ease from '../ease'
-import {IShape} from "../dom/def";
-import {EaseType} from "../ease/def";
-import {IInterpolationFuncitonGenerator, ITimingFunction} from "../interpolate/def";
-import {interpolater} from "../interpolate/index";
+import {IShape} from '../dom/def';
+import {EaseType} from '../ease/def';
+import {IInterpolationFuncitonGenerator, ITimingFunction} from '../interpolate/def';
+import {interpolater} from '../interpolate/index';
 
 export interface IKeyFrame<T> {
 	start: T,
@@ -23,7 +23,8 @@ export class DynamicTween implements IDynamicTween {
 
 	private _history: number[]
 
-	constructor(public target: IShape) {}
+	constructor(public target: IShape) {
+	}
 
 	elapsed(time: number): number {
 		let last = this._history[this._history.length - 1]
@@ -97,7 +98,8 @@ export class StaticTween implements IStaticTween {
 		[key: string]: any
 	} = {}
 
-	constructor(public target: IShape) {}
+	constructor(public target: IShape) {
+	}
 
 	elapsed(time: number) {
 		return 0
@@ -125,13 +127,17 @@ export class StaticTween implements IStaticTween {
 		Object.keys(this._propsToSet).forEach(key => this.target[key] = this._propsToSet[key])
 	}
 
-	stop(timeStamp) {}
+	stop(timeStamp) {
+	}
 
-	pause(timeStamp) {}
+	pause(timeStamp) {
+	}
 
-	resume(timeStamp) {}
+	resume(timeStamp) {
+	}
 
-	reset() {}
+	reset() {
+	}
 }
 
 export class EmptyTween implements IEmptyTween {

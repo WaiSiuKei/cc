@@ -1,9 +1,10 @@
-import {absoluteFontSize, fontStyle, fontVariant, fontWeight, IFont, relativeFontSize} from "./def";
+import {absoluteFontSize, fontStyle, fontVariant, fontWeight, IFont, relativeFontSize} from './def';
 
 export class Font implements IFont {
 	_font: string
 	_family?: string
-	_size?: absoluteFontSize | relativeFontSize | number | string
+	// _size?: absoluteFontSize | relativeFontSize | number | string
+	_size?: number
 	_style?: fontStyle
 	_variant?: fontVariant
 	_weight?: fontWeight
@@ -84,14 +85,14 @@ export class Font implements IFont {
 	}
 
 	private _assembleFont() {
-		this._font = `${this._style || ''} ${this._variant || ''} ${this._weight || ''} ${this._size || ''} ${this._height ? '/' : ''} ${this._height || ''} ${this._family}`
+		this._font = `${this._style || ''} ${this._variant || ''} ${this._weight || ''} ${this._size + 'px'} ${this._height ? '/' : ''} ${this._height || ''} ${this._family}`
 		this.merics = getTextMetrics(this._font, this._height)
 	}
 
 	private _disassembleFont() {
 		let font = cssFontParser(this._font)
 		this._family = font['font-family'].join(', ') || ''
-		this._size = font['font-size'] || '100%'
+		// this._size = font['font-size'] || '100%'
 		this._style = font['font-style'] || 'normal'
 		this._variant = font['font-variant'] || 'normal'
 		this._weight = font['font-weight'] || 'normal'
@@ -122,8 +123,7 @@ function parseIdentifier(str) {
 
 	for (var i = 0; i < identifiers.length; i += 1) {
 		if (/^(-?\d|--)/.test(identifiers[i]) ||
-			!/^([_a-zA-Z0-9-]|[^\0-\237]|(\\[0-9a-f]{1,6}(\r\n|[ \n\r\t\f])?|\\[^\n\r\f0-9a-f]))+$/.test(identifiers[i]))
-		{
+			!/^([_a-zA-Z0-9-]|[^\0-\237]|(\\[0-9a-f]{1,6}(\r\n|[ \n\r\t\f])?|\\[^\n\r\f0-9a-f]))+$/.test(identifiers[i])) {
 			return null;
 		}
 	}
@@ -151,7 +151,7 @@ function cssFontParser(input): CSSFont {
 		};
 
 	for (let c, i = 0; c = input.charAt(i); i += 1) {
-		if (state === states.BEFORE_FONT_FAMILY && (c === '"' || c === "'")) {
+		if (state === states.BEFORE_FONT_FAMILY && (c === '"' || c === '\'')) {
 			let index = i + 1;
 
 			// consume the entire string
@@ -181,8 +181,7 @@ function cssFontParser(input): CSSFont {
 		} else if (state === states.VARIATION && (c === ' ' || c === '/')) {
 			if (/^((xx|x)-large|(xx|s)-small|small|large|medium)$/.test(buffer) ||
 				/^(larg|small)er$/.test(buffer) ||
-				/^(\+|-)?([0-9]*\.)?[0-9]+(em|ex|ch|rem|vh|vw|vmin|vmax|px|mm|cm|in|pt|pc|%)$/.test(buffer))
-			{
+				/^(\+|-)?([0-9]*\.)?[0-9]+(em|ex|ch|rem|vh|vw|vmin|vmax|px|mm|cm|in|pt|pc|%)$/.test(buffer)) {
 				state = c === '/' ? states.LINE_HEIGHT : states.BEFORE_FONT_FAMILY;
 				result['font-size'] = buffer;
 			} else if (/^(italic|oblique)$/.test(buffer)) {
@@ -237,7 +236,7 @@ function getTextMetrics(font: string, lineHeight: string | number): TextMetric {
 	let text = document.createElement('span');
 	text.innerText = 'Hg';
 	text.style.fontFamily = font;
-	text.style.fontSize = parseInt(font) + "px";
+	text.style.fontSize = parseInt(font) + 'px';
 	text.style.lineHeight = lineHeight + '';
 
 	let block = document.createElement('div');

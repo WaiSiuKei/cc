@@ -1,10 +1,10 @@
-import {Element} from "../dom/element";
-import {IBaseText, IText, TextAlign, TextBaseLine} from "./def";
-import {Rectangle} from "../core/rectangle";
-import {Font} from "../core/font";
-import {fontStyle, fontVariant, fontWeight, IBaseRectangle} from "../core/def";
-import {Matrix} from "../core/matrix";
-import {Vector} from "../core/vector";
+import {Element} from '../dom/element';
+import {IBaseText, IText, TextAlign, TextBaseLine} from './def';
+import {Rectangle} from '../core/rectangle';
+import {Font} from '../core/font';
+import {fontStyle, fontVariant, fontWeight, IBaseRectangle} from '../core/def';
+import {Matrix} from '../core/matrix';
+import {Vector} from '../core/vector';
 
 export class Text extends Element {
 	value: string
@@ -51,31 +51,35 @@ export class Text extends Element {
 		return this._bounds
 	}
 
+	get fontSize() {
+		return this.font.size
+	}
+
+	set fontSize(val) {
+		console.log('set', val)
+		this.font.size = val
+	}
+
 	calculateBoundingBox(): IBaseRectangle {
 		let {height, descent, ascent} = this.font.merics
 		let rect = {x: this.x, y: this.y, width: this._width, height: height}
 		switch (this.textBaseline) {
-			case TextBaseLine.Middle:
-			{
+			case TextBaseLine.Middle: {
 				rect.y += (ascent - height / 2)
 			}
-			case TextBaseLine.Alphabetic:
-			{
+			case TextBaseLine.Alphabetic: {
 				rect.y += descent
 			}
-			case TextBaseLine.Bottom:
-			{
+			case TextBaseLine.Bottom: {
 				rect.y -= height
 			}
 		}
 
 		switch (this.textAlign) {
-			case TextAlign.Center:
-			{
+			case TextAlign.Center: {
 				rect.x += (this._width / 2)
 			}
-			case TextAlign.Right:
-			{
+			case TextAlign.Right: {
 				rect.x -= this._width
 			}
 		}

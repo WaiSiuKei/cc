@@ -1,4 +1,4 @@
-import {IElement} from "../dom/def";
+import {IElement} from '../dom/def';
 
 export interface IBaseText {
 	value: string
@@ -8,7 +8,7 @@ export interface IBaseText {
 	textBaseline?: TextBaseLine,
 	font?: string;
 	fontFamily?: string | null;
-	fontSize?: string | null;
+	fontSize?: number | null;
 	fontStyle?: string | null;
 	fontVariant?: string | null;
 	fontWeight?: string | null;
@@ -32,4 +32,5 @@ export enum TextBaseLine {
 	Bottom = 'bottom'
 }
 
-export interface IText extends IElement, IBaseText {}
+export interface IText extends IElement, IBaseText {
+}
